@@ -25,24 +25,24 @@ pub fn build(b: *std.Build) void {
         .name = "httpz_template",
         .root_module = exe_mod,
     });
-    exe.linkLibC();
+    // exe.linkLibC();
 
-    const target_os = target.result.os.tag;
-    if (target_os == .windows) {
-        exe.addLibraryPath(b.path("src/lib/"));
-        exe.linkSystemLibrary("libpq");
-    } else {
-        const postgres = b.dependency("libpq", .{ 
-            .target = target,
-            .optimize = optimize });
-        const libpq = postgres.artifact("pq");
+    // const target_os = target.result.os.tag;
+    // if (target_os == .windows) {
+    //     exe.addLibraryPath(b.path("src/lib/"));
+    //     exe.linkSystemLibrary("libpq");
+    // } else {
+    //     const postgres = b.dependency("libpq", .{ 
+    //         .target = target,
+    //         .optimize = optimize });
+    //     const libpq = postgres.artifact("pq");
 
-        exe.linkLibrary(libpq);
-    }
+    //     exe.linkLibrary(libpq);
+    // }
 
         
-    exe.addIncludePath(b.path("src/lib/"));
-    exe.addCSourceFile(.{ .file = b.path("src/lib/libpq-fe.c"), .flags = &[_][]const u8{ "-g", "-O3" } });
+    // exe.addIncludePath(b.path("src/lib/"));
+    // exe.addCSourceFile(.{ .file = b.path("src/lib/libpq-fe.c"), .flags = &[_][]const u8{ "-g", "-O3" } });
     exe.root_module.addImport("httpz", httpz.module("httpz"));
     exe.root_module.addImport("pg", pg.module("pg"));
 

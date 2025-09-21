@@ -25,13 +25,6 @@ pub fn main() !void {
     const db = try postgresFactory(allocator);
     defer db.deinit();
 
-    // var resp = try db.query("select first_name from users where id = $1", .{1});
-    // defer resp.deinit();
-
-    // while (try resp.next()) |row| {
-    //     const id = row.get([]u8, 0);
-    //     std.debug.print("value {s}", .{id});
-    // }
 
     var app: App = .{
         .allocator = allocator,
@@ -44,8 +37,6 @@ pub fn main() !void {
     defer server.stop();
 
     var router = try server.router(.{});
-
-    // router.get("/", getUser, .{});
 
     for (routers) |r| {
         switch (r.method) {

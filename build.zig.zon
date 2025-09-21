@@ -40,10 +40,10 @@
             .url = "git+https://github.com/karlseguin/http.zig?ref=master#0ce9038e13c138423f68d95a475159039458e798",
             .hash = "httpz-0.0.0-PNVzrJ-0BgAp8WPkVfsFGNPRlRpBoU-8w0LxMDXBp37t",
         },
-        .libpq = .{
-            .url = "git+https://github.com/allyourcodebase/libpq?ref=5.16.4+3#b8b3a5acc9d2613ab926e2f7625552bbf9acaf90",
-            .hash = "libpq-5.16.4-QME6aVj4AAD9AxF3KV877U06maI3NcEjO_a9T8JJtOG9",
-        },
+        // .libpq = .{
+        //     .url = "git+https://github.com/allyourcodebase/libpq?ref=5.16.4+3#b8b3a5acc9d2613ab926e2f7625552bbf9acaf90",
+        //     .hash = "libpq-5.16.4-QME6aVj4AAD9AxF3KV877U06maI3NcEjO_a9T8JJtOG9",
+        // },
         .pg = .{
             .url = "git+https://github.com/karlseguin/pg.zig?ref=master#cfb791e797e32714f800e809ad2a33981e3cbd6d",
             .hash = "pg-0.0.0-Wp_7gZ_8BQCXYRZGoR6uFJoGAW-75aK92UFFp3a7IS4j",

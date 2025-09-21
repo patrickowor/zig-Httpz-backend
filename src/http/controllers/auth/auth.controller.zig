@@ -19,27 +19,8 @@ pub const authRouters = [_]AppRouter{
 
 fn getUserInfo(app: *App, _: *httpz.Request, res: *httpz.Response) !void {
 
-   _ = try UserService.init(app, res.arena).getByid( 1);
-   
+   const user = try UserService.init(app, res.arena).getByid( 1);
+    defer res.arena.destroy(user);
 
-    // const conn = try app.db.acquire();
-    // defer conn.deinit();
-    // const row = (try conn.row("select id, age,first_name , last_name  from users  where id = $1", .{1}));
-        
-    // if (row == null) {   
-    //     return error.ResultNotFound;
-    // }
-    // var result: pg.QueryRow = undefined;
-    // result = row.?;
-    // const user: Users = .{
-    //     .id = result.get(pg.Numeric, 0),
-    //     .age = result.get(pg.Numeric, 1),
-    //     .first_name = result.get([]const u8, 2),
-    //     .last_name  = result.get([]const u8, 3)
-    // };
-
-
-
-
-    try res.json(.{  .m = "hi",    }, .{});
+    try res.json(.{ .user = user  }, .{});
 }

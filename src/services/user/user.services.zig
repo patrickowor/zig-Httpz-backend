@@ -11,7 +11,7 @@ pub const UserService = struct {
         return .{ .pg = app.db, .arena = alloc };
     }
 
-    pub fn getByid(self: *const UserService, id: usize) !Users {
+    pub fn getByid(self: *const UserService, id: usize) !*Users {
         const conn = try self.pg.acquire();
         defer conn.deinit();
 
@@ -28,38 +28,21 @@ pub const UserService = struct {
         
         const user = try self.arena.create(Users);
 
-        // const idx: pg.Numeric = result.get(pg.Numeric, 0);
-        // const age: pg.Numeric = result.get(pg.Numeric, 1);
-        const first_name: []u8 = result.get([]u8, 2);
-        const last_name: []u8 = result.get([]u8, 3);
+        const idx: i32 = result.get(i32, 0);
+        const age: pg.Numeric = result.get(pg.Numeric, 1);
+        var first_name: []u8 = result.get([]u8, 2);
+        var last_name: []u8 = result.get([]u8, 3);
 
+        var age_buffer: [32] u8 = undefined;
+        const age_len : usize = age.estimatedStringLen();
+        _ = age.toString(&age_buffer);
 
-        
-        user.*.first_name = first_name[0..first_name.len];
-        @memcpy(user.*.first_name, first_name[0..first_name.len]);
-        @memcpy(user.*.last_name, last_name[0..last_name.len]);
-        // user.*.last_name = last_name[0..last_name.len];
-        user.*.age = last_name[0..last_name.len];
-        user.*.id = last_name[0..last_name.len];
-
-        std.debug.print("{any} {any}", .{user, &last_name[0..]});
-        // result.get(pg.Numeric, 0)
-        // @memcpy(user.first_name, result.get([]u8, 2));
-        // @memcpy(user.last_name, result.get([]u8, 3));
-
-
-        // user.* = .{
-        //     .id = result.get(pg.Numeric, 0),
-        //     .age = result.get(pg.Numeric, 1),
-        //     .first_name = 
-        //     .last_name = result.get([]u8, 3)
-        // };
-        // user.*
-        // user.*.age = result.get(pg.Numeric, 1);
-        // user.*.first_name = result.get([]u8, 2);
-        // user.*.last_name = result.get([]u8, 3);
-   
-    //    std.debug.print("firstname={s}, firstname_arr={any} user={any}", .{user.first_name, user.last_name, user});
-        return user.*;
+        user.* = .{
+            .id = idx,
+            .age =  try self.arena.dupe(u8, age_buffer[0..age_len - 1]),
+            .first_name = try self.arena.dupe(u8, first_name[0..]),
+            .last_name = try self.arena.dupe(u8, last_name[0..]),
+        };
+        return user;
     }
 };
